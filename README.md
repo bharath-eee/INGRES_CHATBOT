@@ -125,6 +125,16 @@ The system implements the Ground Water Resource Estimation Committee 2015 method
 # 1. Navigate to the project directory
 cd ingres-python
 
+**Create a virtual environment** (recommended):
+   ```cmd
+python -m venv venv
+   ```
+
+**Activate the virtual environment**:
+   ```cmd
+venv\Scripts\activate
+python -m pip install --upgrade pip
+
 # 2. Install dependencies
 pip install -r requirements.txt
 

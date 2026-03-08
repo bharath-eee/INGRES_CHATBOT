@@ -1,0 +1,57 @@
+{
+    "states": [
+        {"name": "Example State", "code": "ES"}
+    ],
+    "districts": [
+        {"name": "Example District 1", "state_id": 37, "code": "ED1"},
+        {"name": "Example District 2", "state_id": 37, "code": "ED2"}
+    ],
+    "groundwater": [
+        {
+            "district_id": 727,
+            "assessment_year": 2022,
+            "total_annual_recharge": 12500.50,
+            "monsoon_recharge": 8500.00,
+            "non_monsoon_recharge": 4000.50,
+            "total_extraction": 10000.00,
+            "irrigation_extraction": 8500.00,
+            "domestic_extraction": 1000.00,
+            "industrial_extraction": 500.00,
+            "extractable_resource": 8750.35,
+            "stage_of_extraction": 114.29,
+            "pre_monsoon_level": 12.5,
+            "post_monsoon_level": 8.2,
+            "dug_wells": 2500,
+            "shallow_tubewells": 1500,
+            "deep_tubewells": 300,
+            "aquifer_type": "Alluvial",
+            "rock_type": "Alluvium",
+            "geographical_area": 3500.50,
+            "cultivable_area": 2100.30,
+            "irrigated_area": 1400.20
+        },
+        {
+            "district_id": 728,
+            "assessment_year": 2022,
+            "total_annual_recharge": 18000.00,
+            "monsoon_recharge": 12000.00,
+            "non_monsoon_recharge": 6000.00,
+            "total_extraction": 10000.00,
+            "irrigation_extraction": 8000.00,
+            "domestic_extraction": 1500.00,
+            "industrial_extraction": 500.00,
+            "extractable_resource": 12600.00,
+            "stage_of_extraction": 79.37,
+            "pre_monsoon_level": 8.5,
+            "post_monsoon_level": 5.2,
+            "dug_wells": 3500,
+            "shallow_tubewells": 2000,
+            "deep_tubewells": 500,
+            "aquifer_type": "Hard Rock - Granite",
+            "rock_type": "Granite",
+            "geographical_area": 4500.00,
+            "cultivable_area": 2800.00,
+            "irrigated_area": 1800.00
+        }
+    ]
+}

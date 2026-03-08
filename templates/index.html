@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IN-GRES | India Groundwater Resource Estimation System</title>
+    <meta name="description" content="IN-GRES - AI-powered groundwater resource assessment system for India based on GEC-2015 methodology">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">💧</div>
+                <div class="title-section">
+                    <h1>IN-GRES</h1>
+                    <div class="subtitle">India Groundwater Resource Estimation System</div>
+                </div>
+            </div>
+            <div class="ministry-badge">
+                <div>🏛️ Ministry of Jal Shakti</div>
+                <div>Government of India</div>
+            </div>
+            <div class="visitor-counter">
+                <span>👁️ Visitors:</span>
+                <strong id="visitorCount">0</strong>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="dashboard">
+                <span class="icon">📊</span>
+                Dashboard
+            </button>
+            <button class="tab-btn" data-tab="explorer">
+                <span class="icon">📁</span>
+                Data Explorer
+            </button>
+            <button class="tab-btn" data-tab="assistant">
+                <span class="icon">🤖</span>
+                AI Assistant
+            </button>
+            <button class="tab-btn" data-tab="addData">
+                <span class="icon">➕</span>
+                Add Data
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content active">
+            <!-- Year Filter -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="dashboardYear">Assessment Year</label>
+                    <select id="dashboardYear" class="filter-select" onchange="handleFilterChange()">
+                        <option value="2022" selected>2022</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Overview Cards -->
+            <div class="overview-grid">
+                <div class="overview-card units">
+                    <div class="icon">🏛️</div>
+                    <div class="info">
+                        <h3>Total States/UTs</h3>
+                        <div class="value" id="totalStates">0</div>
+                    </div>
+                </div>
+                <div class="overview-card units">
+                    <div class="icon">🏘️</div>
+                    <div class="info">
+                        <h3>Total Districts</h3>
+                        <div class="value" id="totalDistricts">0</div>
+                    </div>
+                </div>
+                <div class="overview-card recharge">
+                    <div class="icon">💧</div>
+                    <div class="info">
+                        <h3>Total Annual Recharge</h3>
+                        <div class="value" id="totalRecharge">0 MCM</div>
+                    </div>
+                </div>
+                <div class="overview-card extraction">
+                    <div class="icon">🚰</div>
+                    <div class="info">
+                        <h3>Total Extraction</h3>
+                        <div class="value" id="totalExtraction">0 MCM</div>
+                    </div>
+                </div>
+                <div class="overview-card soe">
+                    <div class="icon">📈</div>
+                    <div class="info">
+                        <h3>Average Stage of Extraction</h3>
+                        <div class="value" id="avgSoe">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Distribution -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Category Distribution (GEC-2015)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="category-grid">
+                        <div class="category-item safe">
+                            <div class="count" id="safeCount">0</div>
+                            <div class="label">✅ Safe</div>
+                            <div class="percentage">SoE &lt; 70%</div>
+                        </div>
+                        <div class="category-item semi-critical">
+                            <div class="count" id="semiCriticalCount">0</div>
+                            <div class="label">⚠️ Semi-Critical</div>
+                            <div class="percentage">70% ≤ SoE &lt; 90%</div>
+                        </div>
+                        <div class="category-item critical">
+                            <div class="count" id="criticalCount">0</div>
+                            <div class="label">🔴 Critical</div>
+                            <div class="percentage">90% ≤ SoE ≤ 100%</div>
+                        </div>
+                        <div class="category-item over-exploited">
+                            <div class="count" id="overExploitedCount">0</div>
+                            <div class="label">❌ Over-exploited</div>
+                            <div class="percentage">SoE &gt; 100%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State Summary Table -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">🗺️ State-wise Summary (Click for Details)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>State/UT</th>
+                                    <th>Districts</th>
+                                    <th>Total Recharge</th>
+                                    <th>Total Extraction</th>
+                                    <th>Avg SoE</th>
+                                    <th>Categories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stateSummaryTable">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GEC Methodology Info -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">📋 GEC-2015 Methodology</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Stage of Extraction (SoE)</strong> = (Total Extraction / Extractable Resources) × 100</p>
+                    <p style="margin-top: 0.5rem;">
+                        The Ground Water Resource Estimation Committee (GEC-2015) methodology is used for assessing groundwater resources in India.
+                        Categories are assigned based on the Stage of Extraction percentage.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Explorer Tab -->
+        <section id="explorer" class="tab-content">
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="filterState">State</label>
+                    <select id="filterState" class="filter-select">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterDistrict">District</label>
+                    <select id="filterDistrict" class="filter-select">
+                        <option value="">All Districts</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterYear">Year</label>
+                    <select id="filterYear" class="filter-select">
+                        <option value="">All Years</option>
+                        <option value="2022">2022</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterCategory">Category</label>
+                    <select id="filterCategory" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="Safe">Safe</option>
+                        <option value="Semi-Critical">Semi-Critical</option>
+                        <option value="Critical">Critical</option>
+                        <option value="Over-exploited">Over-exploited</option>
+                    </select>
+                </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search districts or states...">
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Groundwater Data (Click row for details)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>State</th>
+                                    <th>District</th>
+                                    <th>Year</th>
+                                    <th>Recharge (MCM)</th>
+                                    <th>Extraction (MCM)</th>
+                                    <th>SoE (%)</th>
+                                    <th>Category</th>
+                                    <th>Aquifer Type</th>
+                                    <th>Rock Type</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                                <tr>
+                                    <td colspan="9" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Tab -->
+        <section id="assistant" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🤖 IN-GRES AI Assistant</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="handleQuickAction('india')">🇮🇳 India Overview</button>
+                        <button class="quick-action-btn" onclick="handleQuickAction('gec')">📊 GEC Methodology</button>
+                        <button class="quick-action-btn" onclick="handleQuickAction('categories')">📈 Categories</button>
+                        <button class="quick-action-btn" onclick="handleQuickAction('help')">❓ Help</button>
+                    </div>
+
+                    <!-- Chat Interface -->
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chatInput" 
+                                   placeholder="Ask about groundwater data, GEC methodology, or state reports...">
+                            <button class="chat-send-btn" id="chatSendBtn">Send 💬</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Data Tab -->
+        <section id="addData" class="tab-content">
+            <!-- Add State -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">➕ Add New State</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newStateName">State Name *</label>
+                            <input type="text" id="newStateName" placeholder="e.g., New State">
+                        </div>
+                        <div class="form-group">
+                            <label for="newStateCode">State Code *</label>
+                            <input type="text" id="newStateCode" placeholder="e.g., NS" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="addState()">Add State</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add District -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">➕ Add New District</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newDistrictState">Select State *</label>
+                            <select id="newDistrictState">
+                                <option value="">Choose State...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newDistrictName">District Name *</label>
+                            <input type="text" id="newDistrictName" placeholder="e.g., New District">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="addDistrict()">Add District</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Groundwater Data -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">💧 Add Groundwater Data</h2>
+                </div>
+                <div class="card-body">
+                    <form id="groundwaterForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>District ID *</label>
+                                <input type="number" name="district_id" placeholder="District ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Assessment Year *</label>
+                                <input type="number" name="assessment_year" placeholder="2022" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Annual Recharge (MCM) *</label>
+                                <input type="number" step="0.01" name="total_annual_recharge" placeholder="MCM" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Monsoon Recharge (MCM)</label>
+                                <input type="number" step="0.01" name="monsoon_recharge" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Non-Monsoon Recharge (MCM)</label>
+                                <input type="number" step="0.01" name="non_monsoon_recharge" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Extraction (MCM) *</label>
+                                <input type="number" step="0.01" name="total_extraction" placeholder="MCM" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Irrigation Extraction (MCM)</label>
+                                <input type="number" step="0.01" name="irrigation_extraction" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Domestic Extraction (MCM)</label>
+                                <input type="number" step="0.01" name="domestic_extraction" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Industrial Extraction (MCM)</label>
+                                <input type="number" step="0.01" name="industrial_extraction" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Extractable Resource (MCM)</label>
+                                <input type="number" step="0.01" name="extractable_resource" placeholder="MCM">
+                            </div>
+                            <div class="form-group">
+                                <label>Stage of Extraction (%) *</label>
+                                <input type="number" step="0.01" name="stage_of_extraction" placeholder="%" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select name="category">
+                                    <option value="">Auto-calculated</option>
+                                    <option value="Safe">Safe</option>
+                                    <option value="Semi-Critical">Semi-Critical</option>
+                                    <option value="Critical">Critical</option>
+                                    <option value="Over-exploited">Over-exploited</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Pre-Monsoon Level (m bgl)</label>
+                                <input type="number" step="0.01" name="pre_monsoon_level" placeholder="meters">
+                            </div>
+                            <div class="form-group">
+                                <label>Post-Monsoon Level (m bgl)</label>
+                                <input type="number" step="0.01" name="post_monsoon_level" placeholder="meters">
+                            </div>
+                            <div class="form-group">
+                                <label>Aquifer Type</label>
+                                <select name="aquifer_type">
+                                    <option value="">Select...</option>
+                                    <option value="Alluvial">Alluvial</option>
+                                    <option value="Hard Rock - Granite">Hard Rock - Granite</option>
+                                    <option value="Hard Rock - Basalt">Hard Rock - Basalt</option>
+                                    <option value="Hard Rock - Sandstone">Hard Rock - Sandstone</option>
+                                    <option value="Hard Rock - Limestone">Hard Rock - Limestone</option>
+                                    <option value="Sedimentary">Sedimentary</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Rock Type</label>
+                                <input type="text" name="rock_type" placeholder="e.g., Granite, Alluvium">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="addGroundwaterData()">Add Data</button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bulk Import Info -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">📥 Bulk Data Import</h2>
+                </div>
+                <div class="card-body">
+                    <p>For bulk data import, use the API endpoint: <code>POST /api/data/import</code></p>
+                    <p style="margin-top: 0.5rem;">
+                        The import endpoint accepts JSON with arrays for states, districts, and groundwater data.
+                    </p>
+                    <pre style="background: #f5f5f5; padding: 1rem; border-radius: 8px; margin-top: 1rem; overflow-x: auto;">
+{
+    "states": [{"name": "State Name", "code": "SN"}],
+    "districts": [{"name": "District Name", "state_id": 1}],
+    "groundwater": [{"district_id": 1, "assessment_year": 2022, ...}]
+}</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Report</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 2rem; color: #6c757d; font-size: 0.85rem;">
+        <p>💧 IN-GRES - India Groundwater Resource Estimation System</p>
+        <p>Ministry of Jal Shakti, Government of India | Based on GEC-2015 Methodology</p>
+        <p style="margin-top: 0.5rem;">© 2024 All Rights Reserved</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/static/js/app.js"></script>
+    <script>
+        // Populate the add district state dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/states')
+                .then(res => res.json())
+                .then(states => {
+                    const select = document.getElementById('newDistrictState');
+                    states.forEach(s => {
+                        const option = document.createElement('option');
+                        option.value = s.id;
+                        option.textContent = s.name;
+                        select.appendChild(option);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
